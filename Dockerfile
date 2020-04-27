@@ -51,5 +51,5 @@ RUN if [ -n "$NPM_VERSION" ]; then \
 
 RUN apk del curl make gcc g++ python linux-headers binutils-gold gnupg && \
   rm -rf /node-${VERSION}* /SHASUMS256.txt /tmp/* \
-    /usr/share/doc /root/.npm /root/.node-gyp /root/.config \
+    /usr/share/doc /root/.npm /root/.node-gyp /root/.config && \
   { rm -rf /root/.gnupg || true; }
