@@ -1,9 +1,11 @@
 FROM alpine:3.11
 
-ENV VERSION=v12.16.1 NPM_VERSION=6 YARN_VERSION=latest
+ENV VERSION=v12.16.2 NPM_VERSION=6 YARN_VERSION=latest TZ=America/Cancun
 
 RUN apk upgrade --no-cache -U && \
-  apk add --no-cache curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++
+  apk add --no-cache tzdata curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++
+
+RUN cp /usr/share/zoneinfo/$TZ /etc/localtime
 
 RUN for server in ipv4.pool.sks-keyservers.net keyserver.pgp.com ha.pool.sks-keyservers.net; do \
     gpg --keyserver $server --recv-keys \
@@ -46,3 +48,8 @@ RUN if [ -n "$NPM_VERSION" ]; then \
       ln -s /usr/local/share/yarn/bin/yarnpkg /usr/local/bin/ && \
       rm ${YARN_VERSION}.tar.gz*; \
     fi;
+
+RUN apk del curl make gcc g++ python linux-headers binutils-gold gnupg && \
+  rm -rf /node-${VERSION}* /SHASUMS256.txt /tmp/* \
+    /usr/share/doc /root/.npm /root/.node-gyp /root/.config \
+  { rm -rf /root/.gnupg || true; }
