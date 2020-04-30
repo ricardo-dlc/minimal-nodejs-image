@@ -1,6 +1,6 @@
 FROM alpine:3.11
 
-ENV VERSION=v12.16.2 NPM_VERSION=6 YARN_VERSION=latest TZ=America/Cancun
+ENV VERSION=v12.16.3 NPM_VERSION=6 YARN_VERSION=latest TZ=America/Cancun
 
 RUN apk upgrade --no-cache -U && \
   apk add --no-cache tzdata curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++
