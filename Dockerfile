@@ -1,11 +1,13 @@
 FROM alpine:3.11
 
-ENV VERSION=v12.18.3 NPM_VERSION=6 YARN_VERSION=latest TZ=America/Cancun
+ARG TZ=America/Cancun
+
+ENV VERSION=v12.18.4 NPM_VERSION=6 YARN_VERSION=latest
 
 RUN apk upgrade --no-cache -U && \
   apk add --no-cache tzdata curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++
 
-RUN cp /usr/share/zoneinfo/$TZ /etc/localtime
+RUN cp /usr/share/zoneinfo/${TZ} /etc/localtime
 
 RUN for server in ipv4.pool.sks-keyservers.net keyserver.pgp.com ha.pool.sks-keyservers.net; do \
     gpg --keyserver $server --recv-keys \
@@ -31,11 +33,11 @@ RUN curl -sfSLO https://nodejs.org/dist/${VERSION}/node-${VERSION}.tar.xz && \
   make -j$(getconf _NPROCESSORS_ONLN) && \
   make install
 
-RUN if [ -n "$NPM_VERSION" ]; then \
+RUN if [ -n "${NPM_VERSION}" ]; then \
       npm install -g npm@${NPM_VERSION}; \
     fi; \
     find /usr/lib/node_modules/npm -type d \( -name test -o -name .bin \) | xargs rm -rf; \
-    if [ -n "$YARN_VERSION" ]; then \
+    if [ -n "${YARN_VERSION}" ]; then \
       for server in ipv4.pool.sks-keyservers.net keyserver.pgp.com ha.pool.sks-keyservers.net; do \
         gpg --keyserver $server --recv-keys \
           6A010C5166006599AA17F08146C2130DFD2497F5 && break; \
