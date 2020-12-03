@@ -6,22 +6,9 @@ node {
     ]) {
         def app
         def scmVars
-        def LATEST_VERSION
-        def LATEST_VERSION_NUMBERS
-        def LATEST_VERSION_MAJOR_NUMBER
-        def LATEST_VERSION_MINOR_NUMBER
-        def LATEST_VERSION_PATCH_NUMBER
-        def LATEST_VERSION_MAJOR
-        def LATEST_VERSION_MINOR
-        def LATEST_VERSION_PATCH
-        def PREVIOUS_VERSION
-        def PREVIOUS_VERSION_NUMBERS
-        def PREVIOUS_VERSION_MAJOR_NUMBER
-        def PREVIOUS_VERSION_MINOR_NUMBER
-        def PREVIOUS_VERSION_PATCH_NUMBER
-        def PREVIOUS_VERSION_MAJOR
-        def PREVIOUS_VERSION_MINOR
-        def PREVIOUS_VERSION_PATCH
+        def MAJOR_VERSION
+        def MINOR_VERSION
+        def PATCH_VERSION
 
         stage('Clone repository') {
             // Let's make sure we have the repository cloned to our workspace
@@ -29,14 +16,9 @@ node {
         }
 
         stage('Generate version variables for tagging') {
-            def TAG_PREFIX = ~/^Node/
-
-            // Build tags for the tag tried to build (latest one)
-            LATEST_VERSION = sh(returnStdout: true, script: 'git describe --abbrev=0 --tags').trim() - TAG_PREFIX
-            LATEST_VERSION_NUMBERS = LATEST_VERSION.split('\\.')
-            LATEST_VERSION_MAJOR = LATEST_VERSION_NUMBERS[0]
-            LATEST_VERSION_MINOR = LATEST_VERSION_MAJOR + '.' + LATEST_VERSION_NUMBERS[1]
-            LATEST_VERSION_PATCH = LATEST_VERSION
+            MAJOR_VERSION = '12'
+            MINOR_VERSION = '12.19'
+            PATCH_VERSION = '12.19.0'
         }
 
         stage('Build image from Dockerfile') {
@@ -75,12 +57,12 @@ node {
                 app.push("latest")
 
                 // Not push the 0 major version
-                if (Integer.parseInt(LATEST_VERSION_MAJOR) > 0) {
-                    app.push(LATEST_VERSION_MAJOR)
+                if (Integer.parseInt(MAJOR_VERSION) > 0) {
+                    app.push(MAJOR_VERSION)
                 }
 
-                app.push(LATEST_VERSION_MINOR)
-                app.push(LATEST_VERSION_PATCH)
+                app.push(MINOR_VERSION)
+                app.push(PATCH_VERSION)
             }
         }
 
