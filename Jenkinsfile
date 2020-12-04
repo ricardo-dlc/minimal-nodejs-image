@@ -17,8 +17,8 @@ node {
 
         stage('Generate Version Tags') {
             MAJOR_VERSION = '12'
-            MINOR_VERSION = '12.19'
-            PATCH_VERSION = '12.19.1'
+            MINOR_VERSION = '12.20'
+            PATCH_VERSION = '12.20.0'
         }
 
         stage('Build Image From Dockerfile') {
