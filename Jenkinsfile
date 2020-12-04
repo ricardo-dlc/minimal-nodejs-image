@@ -10,33 +10,33 @@ node {
         def MINOR_VERSION
         def PATCH_VERSION
 
-        stage('Clone repository') {
+        stage('Clone Repository') {
             // Let's make sure we have the repository cloned to our workspace
             scmVars = checkout scm
         }
 
-        stage('Generate version variables for tagging') {
+        stage('Generate Version Tags') {
             MAJOR_VERSION = '12'
             MINOR_VERSION = '12.19'
-            PATCH_VERSION = '12.19.0'
+            PATCH_VERSION = '12.19.1'
         }
 
-        stage('Build image from Dockerfile') {
+        stage('Build Image From Dockerfile') {
             timeout(time: 6, unit: 'HOURS') {
                 sh "docker build -t ${REGISTRY} . --squash"
             }
         }
 
-        stage('List Docker images after build') {
+        stage('List Docker Images After Build') {
             sh 'docker images'
         }
 
-        stage('Point to recent created image') {
+        stage('Point To Recent Created Image') {
             // This points the builded image to app
             app = docker.image("${REGISTRY}")
         }
 
-        stage('Test image') {
+        stage('Test Image') {
             /* Ideally, we would run a test framework against our image.
             * For this example, we're using a Volkswagen-type approach ;-) */
 
@@ -45,7 +45,7 @@ node {
             }
         }
 
-        stage('Push image to Docker Hub') {
+        stage('Push Image to Docker Registry') {
             /* Finally, we'll push the image with 3 or 4 tags:
             * First, the 'latest' tag.
             * Second, but not always, the incremental major version.
@@ -66,7 +66,7 @@ node {
             }
         }
 
-        stage('Clean up') {
+        stage('Clean Up') {
             /* Delete all tagged images:
             * docker images | grep ${REGISTRY} | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} docker rmi ${REGISTRY}:{}
             * Note: Using docker image prune -f -a instead in order to fully clean up (remove FROM images i.e.)
