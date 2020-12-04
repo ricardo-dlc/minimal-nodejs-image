@@ -2,7 +2,7 @@ FROM alpine:3.11
 
 ARG TZ=America/Cancun
 
-ENV VERSION=v12.19.1 NPM_VERSION=6 YARN_VERSION=latest
+ENV VERSION=v12.20.0 NPM_VERSION=6 YARN_VERSION=latest
 
 RUN apk upgrade --no-cache -U && \
   apk add --no-cache tzdata curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++
